@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bert Bullough</title>
+    <meta name="description" content="Bert Bullough - Portfolio">
+    <meta name="author" content="Bert Bullough">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>B</text></svg>">
+
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --paper: #fafafa;
+            --accent: #ff4444;
+            --mid: #666;
+            --border: #d0d0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: var(--paper);
+            color: var(--ink);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Grain texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 1000;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        a {
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent);
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+            border-color: transparent;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            border: none;
+        }
+
+        .logo:hover {
+            color: var(--ink);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: none;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--accent);
+            transition: width 0.2s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: var(--ink);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 6rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        .hero-intro {
+            font-size: 1.125rem;
+            color: var(--mid);
+            max-width: 600px;
+        }
+
+        .hero-intro .accent {
+            color: var(--accent);
+        }
+
+        /* Projects */
+        .projects {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+        }
+
+        .section-header span {
+            font-size: 0.75rem;
+            color: var(--mid);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .projects-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .project-card {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+
+        .project-card:hover {
+            transform: translateX(8px);
+        }
+
+        .project-meta {
+            font-size: 0.75rem;
+            color: var(--mid);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-card p {
+            color: var(--mid);
+            margin-bottom: 1rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--ink);
+            color: var(--paper);
+            border-radius: 2px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-info h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-info p {
+            font-size: 0.875rem;
+            color: var(--mid);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+        }
+
+        .copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--mid);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            .hero {
+                padding: 4rem 0;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="/" class="logo">Bert Bullough</a>
+            <nav>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Building things<br>that matter.</h1>
+                <p class="hero-intro">
+                    I'm Bert, a developer focused on creating thoughtful digital experiences.
+                    Currently exploring the intersection of <span class="accent">technology</span> and <span class="accent">design</span>.
+                </p>
+            </div>
+        </section>
+
+        <section class="projects" id="projects">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Selected Work</h2>
+                    <span>Projects</span>
+                </div>
+
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-meta">2024 &bull; Web Development</div>
+                        <h3>Project One</h3>
+                        <p>A brief description of this project and what problem it solves. Replace with your actual project details.</p>
+                        <div class="project-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">React</span>
+                            <span class="tag">Node.js</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-meta">2024 &bull; Open Source</div>
+                        <h3>Project Two</h3>
+                        <p>Another project description goes here. Explain the impact and your role in making it happen.</p>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">API</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-meta">2023 &bull; Design System</div>
+                        <h3>Project Three</h3>
+                        <p>Describe what makes this project interesting or unique. What did you learn from building it?</p>
+                        <div class="project-tags">
+                            <span class="tag">CSS</span>
+                            <span class="tag">Design</span>
+                            <span class="tag">Figma</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Get in touch</h3>
+                    <p>Open to interesting projects and collaborations.</p>
+                </div>
+
+                <div class="footer-links">
+                    <a href="https://github.com/dirtmerchant" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://twitter.com/yourusername" target="_blank" rel="noopener">Twitter</a>
+                    <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="mailto:hello@bertbullough.com">Email</a>
+                </div>
+            </div>
+
+            <p class="copyright">&copy; 2024 Bert Bullough. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
