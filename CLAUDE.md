@@ -4,35 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal portfolio website for Bert Bullough. Static HTML/CSS/JS site hosted on GitHub Pages with custom domain bertbullough.com (registered with Squarespace).
+Personal portfolio website for Bert Bullough. Static site hosted on GitHub Pages with custom domain bertbullough.com (DNS via Squarespace).
 
 ## Tech Stack
 
-- Pure HTML/CSS/JavaScript (no build process, no frameworks)
+- Pure HTML/CSS/JavaScript — no frontend frameworks, this is intentional
+- Python build script (`build.py`) for blog generation only
 - Fonts: DM Serif Display (headlines) + IBM Plex Mono (body) via Google Fonts
 - Hosting: GitHub Pages with auto-deployment via GitHub Actions
 
 ## Local Development
 
 ```bash
-# Open index.html directly in browser, or run local server:
+# Static pages (index, 404): open directly or use local server
 python3 -m http.server 8000
-# Visit: http://localhost:8000
+
+# Blog: requires build step (generates blog/ directory from posts/)
+pip install -r requirements.txt
+python3 build.py
 ```
 
-## Deployment
+## Blog System
 
-Push to main branch. GitHub Actions auto-deploys in 1-2 minutes.
+`build.py` converts Markdown posts into static HTML:
 
-```bash
-git add .
-git commit -m "Description of changes"
-git push
-```
+- **Source**: `posts/*.md` with YAML frontmatter (title, date, slug, tags, status)
+- **Templates**: `_templates/post.html` and `_templates/blog-index.html` use `{{placeholder}}` syntax
+- **Output**: `blog/{slug}/index.html` for clean URLs (the `blog/` directory is gitignored)
+- **Filtering**: Only posts with `status: published` are built; drafts are skipped
+- **Sitemap**: `sitemap.xml` is regenerated on each build
+
+The deploy workflow (`deploy.yml`) runs `build.py` before publishing, so blog output doesn't need to be committed.
 
 ## Design Guidelines
 
 - Editorial-style with refined brutalist edge
-- Color scheme: Black (#1a1a1a) on off-white (#fafafa) with red accent (#ff4444)
-- Grain texture overlay for character
-- Keep pure HTML/CSS/JS - no frameworks, this is intentional
+- Color scheme: Black (#1a1a1a) on off-white (#fafafa) with red accent (#ff4444), defined as CSS custom properties in `style.css`
+- Grain texture overlay on body::before for character
+- Keep pure HTML/CSS/JS — no frameworks
