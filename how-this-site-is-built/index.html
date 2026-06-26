@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How This Site Is Built | Bert Bullough</title>
+    <meta name="description" content="How This Site Is Built">
+    <meta name="author" content="Bert Bullough">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>B</text></svg>">
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="/" class="logo">Bert Bullough</a>
+            <nav>
+                <a href="/">Writing</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <article class="article">
+            <div class="container">
+                <div class="article-header">
+                    <h1>How This Site Is Built</h1>
+                    <div class="article-meta">June 26, 2026 &bull; <span class="tag">meta</span> <span class="tag">python</span> <span class="tag">github-actions</span></div>
+                </div>
+                <div class="article-content">
+                    <p>This site runs on a 180-line Python script, two HTML templates, and a GitHub Actions workflow. No static site generator, no JavaScript framework, no build toolchain beyond <code>pip install markdown pyyaml</code>. Here&rsquo;s how the whole thing works.</p>
+<h2>The source files</h2>
+<p>Posts live in a <code>posts/</code> directory as Markdown files with YAML frontmatter:</p>
+<pre><code class="language-markdown">---
+title: &quot;How This Site Is Built&quot;
+date: 2026-06-26
+slug: how-this-site-is-built
+tags: [meta, python]
+status: published
+---
+
+Post content goes here.
+</code></pre>
+<p>The <code>status</code> field controls publishing. Set it to <code>draft</code> and the build skips it. Set it to <code>published</code> and it goes live on the next push.</p>
+<h2>The build script</h2>
+<p><code>build.py</code> does three things:</p>
+<ol>
+<li>
+<p><strong>Parses posts</strong> &ndash; reads each <code>.md</code> file, splits the YAML frontmatter from the Markdown body, and filters to only <code>status: published</code>.</p>
+</li>
+<li>
+<p><strong>Renders HTML</strong> &ndash; converts Markdown to HTML using Python&rsquo;s <code>markdown</code> library (with fenced code blocks, tables, and smart quotes), then drops the result into simple HTML templates using <code>{{placeholder}}</code> string replacement. No Jinja, no template engine. Just <code>str.replace()</code>.</p>
+</li>
+<li>
+<p><strong>Generates output</strong> &ndash; writes each post to <code>{slug}/index.html</code> for clean URLs (so <code>/how-this-site-is-built/</code> instead of <code>/how-this-site-is-built.html</code>), generates the homepage as a post listing, and rebuilds <code>sitemap.xml</code>.</p>
+</li>
+</ol>
+<p>The templates are plain HTML files with placeholders like <code>{{title}}</code>, <code>{{date}}</code>, <code>{{content}}</code>, and <code>{{posts}}</code>. The build script reads them, replaces the placeholders, writes the output. That&rsquo;s it.</p>
+<h2>The deploy pipeline</h2>
+<p>A GitHub Actions workflow in <code>.github/workflows/deploy.yml</code> handles deployment:</p>
+<pre><code class="language-yaml">steps:
+  - uses: actions/checkout@v4
+  - uses: actions/setup-python@v5
+    with:
+      python-version: '3.12'
+  - run: pip install -r requirements.txt
+  - run: python3 build.py
+  - uses: actions/upload-pages-artifact@v3
+    with:
+      path: '.'
+  - uses: actions/deploy-pages@v4
+</code></pre>
+<p>Push to <code>main</code>, the workflow checks out the repo, installs two Python packages, runs the build, and deploys to GitHub Pages. The whole thing finishes in under a minute.</p>
+<h2>Why not use a real static site generator?</h2>
+<p>I&rsquo;ve used Jekyll, Hugo, and Gatsby on other projects. They&rsquo;re fine. But for a personal site with a handful of posts, they&rsquo;re overkill. I don&rsquo;t need plugins, themes, asset pipelines, or hot module replacement. I need Markdown in, HTML out.</p>
+<p>The build script is small enough to read in one sitting, easy to modify, and has exactly two dependencies. When something breaks, there are about 180 lines of code to look at. That&rsquo;s the whole debugging surface.</p>
+<h2>The stack</h2>
+<ul>
+<li><strong>Content</strong>: Markdown with YAML frontmatter</li>
+<li><strong>Build</strong>: Python (<code>markdown</code> + <code>pyyaml</code>), ~180 lines</li>
+<li><strong>Templates</strong>: Plain HTML with <code>{{placeholder}}</code> replacement</li>
+<li><strong>Styling</strong>: Hand-written CSS, no framework</li>
+<li><strong>Hosting</strong>: GitHub Pages</li>
+<li><strong>Deploy</strong>: GitHub Actions, triggered on push to <code>main</code></li>
+<li><strong>DNS</strong>: Squarespace (custom domain)</li>
+</ul>
+<p>Total JavaScript on the site: zero bytes.</p>
+                </div>
+                <div class="article-footer">
+                    <a href="/">&larr; All posts</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Get in touch</h3>
+                    <p>Open to interesting projects and collaborations.</p>
+                </div>
+
+                <!-- No Twitter/X link. I don't support Nazis. -->
+                <div class="footer-links">
+                    <a href="https://github.com/dirtmerchant" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://linkedin.com/in/bertbullough" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="mailto:hello@bertbullough.com">Email</a>
+                </div>
+            </div>
+
+            <p class="copyright">&copy; 2026 Bert Bullough. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
