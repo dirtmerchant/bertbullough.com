@@ -14,7 +14,20 @@
       "Bash(gh workflow run:*)",
       "Bash(git pull:*)",
       "Bash(git stash:*)",
-      "Bash(git stash pop:*)"
+      "Bash(git stash pop:*)",
+      "Bash(gh run watch:*)",
+      "Bash(open https://bertbullough.com)",
+      "Bash(open https://bertbullough.com/blog/)",
+      "WebFetch(domain:bertbullough.com)",
+      "Bash(git -C /Users/bert/repos/bertbullough.com add .nojekyll)",
+      "Bash(git -C /Users/bert/repos/bertbullough.com commit -m \"$\\(cat <<''EOF''\nAdd .nojekyll to prevent Jekyll processing on GitHub Pages\n\nThe blog/ directory was being built correctly but not served,\nlikely due to GitHub Pages Jekyll processing interfering.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/bert/repos/bertbullough.com push)",
+      "Bash(curl:*)",
+      "Bash(gh repo list:*)",
+      "Bash(for repo in cloud-resume-challenge cloudresumechallenge azure-resume)",
+      "Bash(do echo \"=== $repo ===\")",
+      "Bash(done)",
+      "Bash(dig:*)"
     ]
   }
 }
