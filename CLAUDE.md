@@ -9,19 +9,19 @@ Personal portfolio website for Bert Bullough. Static site hosted on GitHub Pages
 ## Tech Stack
 
 - Pure HTML/CSS/JavaScript — no frontend frameworks, this is intentional
-- Python build script (`build.py`) for blog generation only
+- Python build script (`build.py`) generates the homepage and blog posts
 - Fonts: DM Serif Display (headlines) + IBM Plex Mono (body) via Google Fonts
 - Hosting: GitHub Pages with auto-deployment via GitHub Actions
 
 ## Local Development
 
 ```bash
-# Static pages (index, 404): open directly or use local server
-python3 -m http.server 8000
-
-# Blog: requires build step (generates blog/ directory from posts/)
+# Build: generates index.html (homepage/blog listing) and blog/ posts from posts/
 pip install -r requirements.txt
 python3 build.py
+
+# Serve locally
+python3 -m http.server 8000
 ```
 
 ## Blog System
@@ -30,7 +30,7 @@ python3 build.py
 
 - **Source**: `posts/*.md` with YAML frontmatter (title, date, slug, tags, status)
 - **Templates**: `_templates/post.html` and `_templates/blog-index.html` use `{{placeholder}}` syntax
-- **Output**: `blog/{slug}/index.html` for clean URLs (the `blog/` directory is gitignored)
+- **Output**: `index.html` (homepage/blog listing) + `blog/{slug}/index.html` for clean URLs (the `blog/` directory is gitignored; `index.html` is committed via the build)
 - **Filtering**: Only posts with `status: published` are built; drafts are skipped
 - **Sitemap**: `sitemap.xml` is regenerated on each build
 

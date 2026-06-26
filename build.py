@@ -2,8 +2,8 @@
 """Build blog posts from Markdown source files.
 
 Reads posts/*.md with YAML frontmatter, converts to HTML using templates,
-and writes to blog/{slug}/index.html for clean URLs. Also generates a
-blog index page and updates sitemap.xml.
+and writes to blog/{slug}/index.html for clean URLs. Also generates the
+homepage (root index.html) as the blog listing and updates sitemap.xml.
 
 Dependencies: markdown, pyyaml (see requirements.txt)
 """
@@ -120,14 +120,8 @@ def generate_sitemap(posts: list[dict]) -> str:
         f"    <url>\n"
         f"        <loc>{SITE_URL}/</loc>\n"
         f"        <lastmod>{today}</lastmod>\n"
-        f"        <changefreq>monthly</changefreq>\n"
-        f"        <priority>1.0</priority>\n"
-        f"    </url>",
-        f"    <url>\n"
-        f"        <loc>{SITE_URL}/blog/</loc>\n"
-        f"        <lastmod>{today}</lastmod>\n"
         f"        <changefreq>weekly</changefreq>\n"
-        f"        <priority>0.8</priority>\n"
+        f"        <priority>1.0</priority>\n"
         f"    </url>",
     ]
 
@@ -180,10 +174,10 @@ def build():
         (post_dir / "index.html").write_text(html, encoding="utf-8")
         print(f"  built: blog/{post['slug']}/index.html")
 
-    # Render blog index
+    # Render blog index as the homepage
     index_html = render_blog_index(posts, index_template)
-    (BLOG_DIR / "index.html").write_text(index_html, encoding="utf-8")
-    print(f"  built: blog/index.html ({len(posts)} posts)")
+    (ROOT / "index.html").write_text(index_html, encoding="utf-8")
+    print(f"  built: index.html ({len(posts)} posts)")
 
     # Update sitemap
     sitemap = generate_sitemap(posts)
