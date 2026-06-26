@@ -2,14 +2,12 @@
 """Build blog posts from Markdown source files.
 
 Reads posts/*.md with YAML frontmatter, converts to HTML using templates,
-and writes to blog/{slug}/index.html for clean URLs. Also generates the
+and writes to {slug}/index.html for clean URLs. Also generates the
 homepage (root index.html) as the blog listing and updates sitemap.xml.
 
 Dependencies: markdown, pyyaml (see requirements.txt)
 """
 
-import os
-import shutil
 from datetime import date, datetime
 from pathlib import Path
 
@@ -18,7 +16,6 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent
 POSTS_DIR = ROOT / "posts"
-BLOG_DIR = ROOT / "blog"
 TEMPLATES_DIR = ROOT / "_templates"
 SITEMAP_PATH = ROOT / "sitemap.xml"
 SITE_URL = "https://bertbullough.com"
@@ -104,7 +101,7 @@ def render_blog_index(posts: list[dict], template: str) -> str:
             items.append(
                 f'<div class="post-item">\n'
                 f'    <div class="post-item-meta">{date_str}</div>\n'
-                f'    <h3><a href="/blog/{post["slug"]}/">{post["title"]}</a></h3>\n'
+                f'    <h3><a href="/{post["slug"]}/">{post["title"]}</a></h3>\n'
                 f"    {tags_html}\n"
                 f"</div>"
             )
@@ -129,7 +126,7 @@ def generate_sitemap(posts: list[dict]) -> str:
         post_date = post["date"].isoformat() if post["date"] else today
         urls.append(
             f"    <url>\n"
-            f'        <loc>{SITE_URL}/blog/{post["slug"]}/</loc>\n'
+            f'        <loc>{SITE_URL}/{post["slug"]}/</loc>\n'
             f"        <lastmod>{post_date}</lastmod>\n"
             f"        <changefreq>monthly</changefreq>\n"
             f"        <priority>0.6</priority>\n"
@@ -161,18 +158,13 @@ def build():
     # Sort by date descending
     posts.sort(key=lambda p: p["date"] or date.min, reverse=True)
 
-    # Clean and recreate blog directory
-    if BLOG_DIR.exists():
-        shutil.rmtree(BLOG_DIR)
-    BLOG_DIR.mkdir(parents=True)
-
-    # Render each post
+    # Render each post to {slug}/index.html
     for post in posts:
-        post_dir = BLOG_DIR / post["slug"]
+        post_dir = ROOT / post["slug"]
         post_dir.mkdir(parents=True, exist_ok=True)
         html = render_post(post, post_template)
         (post_dir / "index.html").write_text(html, encoding="utf-8")
-        print(f"  built: blog/{post['slug']}/index.html")
+        print(f"  built: {post['slug']}/index.html")
 
     # Render blog index as the homepage
     index_html = render_blog_index(posts, index_template)

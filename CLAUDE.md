@@ -16,7 +16,7 @@ Personal portfolio website for Bert Bullough. Static site hosted on GitHub Pages
 ## Local Development
 
 ```bash
-# Build: generates index.html (homepage/blog listing) and blog/ posts from posts/
+# Build: generates index.html (homepage/blog listing) and {slug}/index.html for each post
 pip install -r requirements.txt
 python3 build.py
 
@@ -30,7 +30,7 @@ python3 -m http.server 8000
 
 - **Source**: `posts/*.md` with YAML frontmatter (title, date, slug, tags, status)
 - **Templates**: `_templates/post.html` and `_templates/blog-index.html` use `{{placeholder}}` syntax
-- **Output**: `index.html` (homepage/blog listing) + `blog/{slug}/index.html` for clean URLs (the `blog/` directory is gitignored; `index.html` is committed via the build)
+- **Output**: `index.html` (homepage/blog listing) + `{slug}/index.html` for clean URLs at the root
 - **Filtering**: Only posts with `status: published` are built; drafts are skipped
 - **Sitemap**: `sitemap.xml` is regenerated on each build
 

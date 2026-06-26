@@ -13,5 +13,5 @@ Thumbs.db
 .env
 .env.local
 
-# Generated blog output
-blog/
+# Python
+.venv/
